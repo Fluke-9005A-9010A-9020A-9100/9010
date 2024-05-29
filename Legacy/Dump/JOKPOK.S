@@ -1,0 +1,1 @@
+! Joker Poker RAM clearINCLUDE "Z80.POD"PROGRAM MAIN   REGF=4000   WRLOOP:       WRITE @REGF = 00       INC REGF       IF REGF > 47FF GOTO END       DPY-$F       GOTO WRLOOP   END:       DPY-RAM WIPE COMPLETED       RUN UUT       STOP

@@ -1,0 +1,38 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! PURPOSE: Used to illustrate simple use of functional modules that can
+!!	be re-used in test programs. For example, the pokey chip is used
+!!	in many Atari boards.
+!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+setup
+	trap active force line no
+	include "6502.POD"
+	POD 6502
+
+program SimpleTest1
+declarations
+
+	assign REG9 to BasePokeyAddr
+
+Start:
+	dpy SIMPLE POKEY TEST, PRESS CONT
+	aux SIMPLE POKEY TEST STARTING...
+	stop
+
+	!! right from Atari's documentation
+	BasePokeyAddr = 1000
+
+	!! use our Pokey Test Suite	
+	execute PKSoundTest
+
+	!! We should have heard something
+	dpy TEST COMPLETE
+
+	!! Trace code
+	aux SIMPLE TEST COMPLETE
+	aux YOU SHOULD HAVE HEARD A TONE
+
+
+!! The PKSoundTest is implemented in this module
+include "~/Utils/Lib/Pokey Suite.9lc" 

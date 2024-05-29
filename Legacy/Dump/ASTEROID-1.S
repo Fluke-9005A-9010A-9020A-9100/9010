@@ -1,0 +1,377 @@
+!Test of Asteroids script, March 1, 2002
+                                                                                                                                                                                                                                                
+                                                                     
+PROGRAM 0   200 BYTES
+
+   DPY-ASTEROIDS TST PGM
+   DPY-+-PRESS CONT
+   STOP
+0: LABEL 0
+   DPY-MNU 1=RAM 2=ROM 3=SND 4=IO 
+   DPY-+-5=VG 6=ADDDEC 7=SW TEST /1
+   IF REG1 = 1 GOTO 1
+   IF REG1 = 2 GOTO 2
+   IF REG1 = 3 GOTO 3
+   IF REG1 = 4 GOTO 4
+   IF REG1 = 5 GOTO 5
+   IF REG1 = 6 GOTO 6
+   IF REG1 = 7 GOTO 7
+   GOTO 0
+1: LABEL 1
+   EXECUTE PROGRAM 10       !Ram Test
+   GOTO 0
+2: LABEL 2
+   EXECUTE PROGRAM 20		!ROM Test
+   GOTO 0
+3: LABEL 3
+   EXECUTE PROGRAM 30		!Sound Test
+   GOTO 0
+4: LABEL 4
+   EXECUTE PROGRAM 50		!I/O Test
+   GOTO 0
+5: LABEL 5
+   EXECUTE PROGRAM 50		!Vector Graphics Test
+   GOTO 0
+6: LABEL 6
+   EXECUTE PROGRAM 60		!Address Decode
+   GOTO 0
+7: LABEL 7
+   EXECUTE PROGRAM 70
+   GOTO 0
+
+PROGRAM 10   151 BYTES        !Ram test - short
+
+   DPY-TESTING VECTOR RAM R3 M3#
+   RAM SHORT @ 4000-43FF
+   DPY-TESTING VECTOR RAM P3 N3#
+   RAM SHORT @ 4400-47FF
+   DPY-TESTING PGM RAM E2 D2#
+   RAM SHORT @ 0000-03FF
+   DPY-RAM TESTING COMPLETE
+   DPY-+-PRESS CONT#
+   STOP
+
+PROGRAM 12   112 BYTES       !Probe what??? part of program 80?
+
+   DPY-START#
+   STOP
+   READ PROBE
+   REG1 = 40
+1: LABEL 1
+   WRITE @ 3E00 = FF
+   DEC REG1
+   IF REG1 > 0 GOTO 1
+   READ PROBE
+   REG0 = REG0 AND 7F
+   IF REG0 = 10 GOTO 2
+   DPY-INCORRECT WAS $0 NOT 16
+   GOTO 3
+2: LABEL 2
+   DPY-COUNT CORRECT $0
+3: LABEL 3
+
+PROGRAM 20   224 BYTES		!Choose which ROM set is tested
+
+0: LABEL 0
+   DPY-ROM VERSION 1 OR 2 ? /1
+   IF REG1 = 1 GOTO 1
+   IF REG1 = 2 GOTO 2
+   GOTO 0
+
+1: LABEL 1
+   DPY-TESTING ROM F1 - RV1
+   ROM TEST @ 6800-6FFF SIG 53C9
+   DPY-TESTING ROM D E1 - RV1
+   ROM TEST @ 7000-77FF SIG 3D7A
+   DPY-TESTING ROM C1 - RV1
+   ROM TEST @ 7800-7FFF SIG 232F
+   DPY-TESTING VECTOR ROM NP3 - RV1
+   ROM TEST @ 5000-57FF SIG CBED
+   GOTO F
+
+2: LABEL 2
+   DPY-TESTING ROM F1 - RV2
+   ROM TEST @ 6800-6FFF SIG 53C9
+   DPY-TESTING ROM D E1 - RV2
+   ROM TEST @ 7000-77FF SIG 3D7A
+   DPY-TESTING ROM C1 - RV2
+   ROM TEST @ 7800-7FFF SIG 232F
+   DPY-TESTING VECTOR ROM NP3 - RV2
+   ROM TEST @ 5000-57FF SIG CBED
+   GOTO F
+
+F: LABEL F
+   DPY-ROM TEST COMPLETE
+   STOP
+
+PROGRAM 30   521 BYTES
+
+   REG1 = 40
+   DPY-EXPLOSION SND. CONT=NEXT
+   DPY-+ SND%1#
+0: LABEL 0
+   WRITE @ 3600 = FF
+   IF REG1 = 25 GOTO 1
+   GOTO 0
+1: LABEL 1
+   REG1 = 40
+   DPY-THUMP SND. CONT=NEXT SND%1#
+2: LABEL 2
+   WRITE @ 3A00 = 1F
+   IF REG1 = 25 GOTO 3
+   GOTO 2
+3: LABEL 3
+   REG1 = 40
+   DPY-SAUCER SND. CONT=NEXT
+   DPY-+ SND%1#
+4: LABEL 4
+   WRITE @ 3C00 = 80
+   IF REG1 = 25 GOTO 5
+   GOTO 4
+5: LABEL 5
+   REG1 = 40
+   DPY-SAUCER FIRE SND.CONT=NEXT
+   DPY-+ SND%1#
+6: LABEL 6
+   WRITE @ 3C01 = 80
+   IF REG1 = 25 GOTO 7
+   GOTO 6
+7: LABEL 7
+   REG1 = 40
+   DPY-SHIP THRUST SND. CONT=
+   DPY-+NEXT SND%1#
+8: LABEL 8
+   WRITE @ 3C03 = 80
+   IF REG1 = 25 GOTO 9
+   GOTO 8
+9: LABEL 9
+   REG1 = 40
+   DPY-SHIP FIRE SND. CONT=NEXT
+   DPY-+ SND%1#
+A: LABEL A
+   WRITE @ 3C04 = 80
+   IF REG1 = 25 GOTO B
+   GOTO A
+B: LABEL B
+   REG1 = 40
+   DPY-LIFE SND. CONT=NEXT SND%1#
+C: LABEL C
+   WRITE @ 3C05 = 80
+   IF REG1 = 25 GOTO F
+   GOTO C
+F: LABEL F
+   REG1 = 40
+   DPY-SND TESTS COMPLETE. PRESS
+   DPY-+ CONT%1#
+   STOP
+
+PROGRAM 50   267 BYTES		!Vector Graphics Test
+
+   DPY-CONNECT SCOPE,XY MODE. CONT !Connect to X/Y outputs
+   STOP
+   WRITE @ 4000 = FF
+   WRITE @ 4001 = A3
+   WRITE @ 4002 = 00
+   WRITE @ 4003 = 02
+   WRITE @ 4004 = FF
+   WRITE @ 4005 = 97
+   WRITE @ 4006 = 00
+   WRITE @ 4007 = 90
+   WRITE @ 4008 = 00
+   WRITE @ 4009 = A2
+   WRITE @ 400A = 00
+   WRITE @ 400B = 00
+   WRITE @ 400C = 00
+   WRITE @ 400D = 90
+   WRITE @ 400E = FF
+   WRITE @ 400F = 33
+   WRITE @ 4010 = 00
+   WRITE @ 4011 = E0
+   DPY-CONFIRM PLUS PATTERN. CONT#
+   DPY-+=EXIT%1#
+0: LABEL 0
+   WRITE @ 3000 = 00
+   IF REG1 = 25 GOTO 2
+   GOTO 0
+2: LABEL 2
+   DPY-##
+
+PROGRAM 60   518 BYTES                     !Check Select logic
+
+   SYNC ADDRESS
+   DPY-PLACE PROBE ON POINTS
+   DPY-+ SHOWN.#
+   STOP
+   DPY-ZPAGE E4-12.#			!Zero Page
+   STOP
+   REGB = 1
+   REG9 = 0000
+   REGB = 40
+   EXECUTE PROGRAM 65
+   DPY-VMEM E4-10.#			!Vector Memory
+   STOP
+   REG9 = 4000
+   EXECUTE PROGRAM 65
+   DPY-PMEM E4-9.#			!Program Memory
+   STOP
+   REG9 = 0200
+   EXECUTE PROGRAM 65
+   DPY-OPTS E4-6.#
+   STOP
+   REG9 = 2800
+   EXECUTE PROGRAM 65
+   DPY-SINP1 E4-5.#
+   STOP
+   REG9 = 2400
+   EXECUTE PROGRAM 65
+   DPY-SINP0 E4-4.#
+   STOP
+   REG9 = 2000
+   EXECUTE PROGRAM 65
+   DPY-VROM L3-10.#
+   STOP
+   REG9 = 5000
+   EXECUTE PROGRAM 65
+   DPY-PROM2 L3-7.#
+   STOP
+   REG9 = 7800
+   EXECUTE PROGRAM 65
+   DPY-PROM1 L3-6.#
+   STOP
+   REG9 = 7000
+   EXECUTE PROGRAM 65
+   DPY-PROM0 L3-5.#
+   STOP
+   REG9 = 6800
+   EXECUTE PROGRAM 65
+   DPY-NOISERST L6-9.#
+   STOP
+   REG9 = 3E00
+   REG8 = 0
+   REGA = FF
+   EXECUTE PROGRAM 65
+   DPY-AUDIO L3-7.#
+   STOP
+   REG9 = 3C00
+   EXECUTE PROGRAM 65
+   DPY-THUMP L6-6.#
+   STOP
+   REG9 = 3A00
+   EXECUTE PROGRAM 65
+   DPY-EXPLODE L6-4.#
+   STOP
+   REG9 = 3600
+   EXECUTE PROGRAM 65
+   DPY-WDCLR L6-3.#
+   STOP
+   REG9 = 3400
+   EXECUTE PROGRAM 65
+   DPY-OUT L6-2.#
+   STOP
+   REG9 = 3200
+   EXECUTE PROGRAM 65
+   DPY-DMAGO L6-1.#
+   STOP
+   REG9 = 3000
+   EXECUTE PROGRAM 65
+   DPY-TST COMPLETE.#
+   STOP
+
+PROGRAM 65   116 BYTES		!Sub-routine of 60
+
+   READ PROBE
+   REG1 = REGB
+1: LABEL 1
+   IF REG8 = 0 GOTO 2
+   READ @ REG9
+   GOTO 3
+2: LABEL 2
+   WRITE @ REG9 = REGA
+3: LABEL 3
+   DEC REG1
+   IF REG1 > 0 GOTO 1
+   READ PROBE
+   REG0 = REG0 AND 7F
+   IF REG0 = REGB GOTO 4
+   DPY-+CNT BAD.
+   GOTO 5
+4: LABEL 4
+   DPY-+ OK. 
+5: LABEL 5
+   DPY-+COUNT @0=@B#
+   STOP
+
+PROGRAM 70                    !Switch test (needs work)
+
+   REGF = 27FF
+SWITCHLOOP:   
+   INC REGF   
+   INC REG2   
+   READ @REGF   
+   IF REGE AND 1 >0 GOTO SWR6OFF    !? Need to step from 2800 - 2803 and read X3 each time
+   GOTO SWON
+
+NEXTSW:      
+   IF REGE AND 2 >0 GOTO SWR6OFF    !?
+   GOTO SWR6ON
+
+ADDTEST:      
+   IF REGF >2803 GOTO CONT          !?
+   GOTO SWITCHLOOP
+   
+SWR6ON:   
+   DPY-#   
+   DPY-R6 NUMBER $2 ON   
+   STOP   
+   GOTO NEXTSW
+   
+SWR6OFF:   
+   DPY-#   
+   DPY-R6 NUMBER $2 OFF   
+   STOP   
+   GOTO NEXTSW
+   
+CONT:   
+   DPY-#   
+   DPY-DIP TEST COMPLETE  
+   STOP 
+
+PROGRAM 80   76 BYTES		!This is the start of a signature analysis setup, needs work...
+
+   SYNC DATA
+2: LABEL 2
+   DPY-CONT START.
+   DPY-+#
+   STOP
+   READ PROBE
+   EXECUTE PROGRAM 85
+   READ PROBE
+   REG0 = REG0 SHR SHR SHR SHR
+   REG0 = REG0 SHR SHR SHR SHR
+   REG0 = REG0 AND FFFF
+   DPY-SIG=$0
+   DPY-+#
+   STOP
+   GOTO 2
+
+PROGRAM 85   173 BYTES
+
+   WRITE @ 4000 = FF
+   WRITE @ 4001 = A3
+   WRITE @ 4002 = 00
+   WRITE @ 4003 = 02
+   WRITE @ 4004 = FF
+   WRITE @ 4005 = 97
+   WRITE @ 4006 = 00
+   WRITE @ 4007 = 90
+   WRITE @ 4008 = 00
+   WRITE @ 4009 = A2
+   WRITE @ 400A = 00
+   WRITE @ 400B = 00
+   WRITE @ 400C = 00
+   WRITE @ 400D = 90
+   WRITE @ 400E = FF
+   WRITE @ 400F = 33
+   WRITE @ 4010 = 00
+   WRITE @ 4011 = E0
+   WRITE @ 3000 = 00

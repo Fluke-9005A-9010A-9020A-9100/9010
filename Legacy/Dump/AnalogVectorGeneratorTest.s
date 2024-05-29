@@ -1,0 +1,51 @@
+
+INCLUDE "BZSetup.txt"
+
+PROGRAM MAIN
+
+0: LABEL 0
+   DPY-ANALOG VECTOR TEST
+   WRITE @ 2000 = 40
+   WRITE @ 2001 = 80
+   WRITE @ 2002 = 00
+   WRITE @ 2003 = 70
+   WRITE @ 2004 = 00
+   WRITE @ 2005 = 1E
+   WRITE @ 2006 = 00
+   WRITE @ 2007 = 1E
+   WRITE @ 2008 = 00
+   WRITE @ 2009 = 60
+   WRITE @ 200A = FF
+   WRITE @ 200B = 03
+   WRITE @ 200C = FF
+   WRITE @ 200D = 03
+   WRITE @ 200E = 00
+   WRITE @ 200F = 62
+   WRITE @ 2010 = 40
+   WRITE @ 2011 = 80
+   WRITE @ 2012 = 80
+   WRITE @ 2013 = 00
+   WRITE @ 2014 = 00
+   WRITE @ 2015 = 00
+   WRITE @ 2016 = 01
+   WRITE @ 2017 = 1F
+   WRITE @ 2018 = 00
+   WRITE @ 2019 = 40
+   WRITE @ 201A = 80
+   WRITE @ 201B = 00
+   WRITE @ 201C = 80
+   WRITE @ 201D = 1F
+   WRITE @ 201E = 00
+   WRITE @ 201F = 00
+   WRITE @ 2020 = FF
+   WRITE @ 2021 = 40
+   WRITE @ 2022 = 00
+   WRITE @ 2023 = E0
+
+	EX vectorgo
+   STOP
+
+PROGRAM vectorgo
+
+   0: label 0
+	WRITE @ 1200
