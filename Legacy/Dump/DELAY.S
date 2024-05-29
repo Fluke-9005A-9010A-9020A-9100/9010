@@ -1,0 +1,1 @@
+! delay PROGRAM!! Approximately 2 second delay!PROGRAM delayREG1=20   0: label 0       DEC REG1       IF REG1 > 0 GOTO 0

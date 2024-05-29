@@ -1,0 +1,53 @@
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Program: PKSSoundTest
+!! Purpose: Simple, simple test that we can do. Parameters are as follows:
+!!
+!!	REG9: Base address of Pokey.
+!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+program PKSoundTest
+declarations
+	assign REG1 to BaseAddr
+	assign REG2 to AddrToWrite
+
+	!! Base address
+	BaseAddr = REG9
+
+	AddrToWrite = BaseAddr
+	AddrToWrite = AddrToWrite inc 16
+
+	write @AddrToWrite = 00
+	write @AddrToWrite = 03
+
+	write @BaseAddr = 55
+
+	AddrToWrite = BaseAddr
+	AddrToWrite = AddrToWrite inc
+
+	write @AddrToWrite = AF		!! Pure tone is heard
+	REG8 = 10
+	execute PKSPause
+	write @AddrToWrite = 0		!! turn it off
+
+
+	!! There are 3 other channels to test. This
+	!! is pretty well documented in Atari's documentation.
+	!! You should expand this to suit your needs.
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Program: PKSPause
+!! Purpose: Pause for a short time. REG8
+!!	It would be better to put a generic function like this in 
+!!	a global routine/because you're going to use it in other programs.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+program PKSPause
+
+	REG1 = REG8
+dloop:
+	dec REG1
+	if REG1 > 0 goto dloop 
+ 
