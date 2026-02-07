@@ -6,6 +6,10 @@
 
 ! Script for Joust by Williams
 
+
+
+! This is the DEFENDER script without updates yet.
+
 INCLUDE "6809E.POD"
 
 SETUP   
